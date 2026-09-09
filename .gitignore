@@ -64,3 +64,5 @@ Thumbs.db
 *.log
 
 chrome_profile/
+
+day-25-us-states-game-start/venv
