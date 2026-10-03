@@ -12,6 +12,7 @@ A multi-user blog built with Flask. Visitors can read posts, register and log in
 - Gravatar avatars for commenters
 - Responsive layout with Bootstrap 5
 - SQLite database via Flask-SQLAlchemy
+- Deployment-ready with Gunicorn and a `Procfile`
 
 ## Tech Stack
 
@@ -24,6 +25,7 @@ A multi-user blog built with Flask. Visitors can read posts, register and log in
 | Editor | Flask-CKEditor |
 | UI | Bootstrap-Flask (Bootstrap 5) |
 | Config | python-dotenv |
+| Production server | Gunicorn |
 
 ## Project Structure
 
@@ -31,11 +33,12 @@ A multi-user blog built with Flask. Visitors can read posts, register and log in
 .
 ├── main.py             # App setup, models, and routes
 ├── forms.py            # WTForms: register, login, post, comment
+├── Procfile            # Process definition for deployment (Gunicorn)
 ├── requirements.txt
 ├── .env                # Secrets (not committed)
-├── .env.example        # Template for .env
+├── .gitignore
 ├── instance/
-│   └── posts.db        # SQLite database (created automatically)
+│   └── posts.db        # SQLite database (created automatically, not committed)
 ├── static/             # CSS, JS, images
 └── templates/
     ├── header.html
@@ -74,25 +77,19 @@ pip install -r requirements.txt
 
 ### 4. Set up environment variables
 
-Copy the example file and fill in your own values:
-
-```bash
-cp .env.example .env
-```
-
-Generate a secret key:
+Create a `.env` file in the project root. First generate a secret key:
 
 ```bash
 python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-Then edit `.env`:
+Then add it to `.env` (no quotes, no spaces around `=`):
 
 ```
 SECRET_KEY=your-generated-key-here
 ```
 
-### 5. Run the app
+### 5. Run the app locally
 
 ```bash
 python main.py
@@ -127,11 +124,26 @@ Open [http://127.0.0.1:5002](http://127.0.0.1:5002) in your browser. The databas
 - **BlogPost**: title, subtitle, date, body, image URL; belongs to an author; has many comments
 - **Comment**: text; belongs to an author and a post
 
-## Deployment Notes
+## Deployment
 
-- Set `debug=False` (or remove `app.run` and use a production server such as Gunicorn). Never run with the debugger enabled in production.
+The project includes a `Procfile` that tells hosting platforms (such as Render or Heroku) how to start the app:
+
+```
+web: gunicorn main:app
+```
+
+You can test Gunicorn locally with:
+
+```bash
+gunicorn main:app
+```
+
+Before deploying:
+
 - Set `SECRET_KEY` as an environment variable on your host. Do not commit it.
-- SQLite is fine for development. For production, use a hosted database such as PostgreSQL and set the connection string through an environment variable.
+- Make sure `app.run(debug=True)` only runs locally. It is inside the `if __name__ == "__main__":` block, so Gunicorn ignores it, but never deploy with the debugger enabled.
+- Register your own account first on the fresh database so you become the admin.
+- SQLite stores data in a local file, and many hosts reset their filesystem on every deploy or restart. For a persistent production setup, use a hosted database such as PostgreSQL and provide its URL through an environment variable.
 
 ## Security
 
