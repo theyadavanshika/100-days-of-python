@@ -13,7 +13,7 @@ A multi-user blog built with Flask. Visitors can read posts, register and log in
 - Comments on posts (login required)
 - Gravatar avatars for commenters
 - Responsive layout with Bootstrap 5
-- SQLite database via Flask-SQLAlchemy
+- SQLite for local development, PostgreSQL in production (via Flask-SQLAlchemy)
 - Deployment-ready with Gunicorn and a `Procfile`
 
 ## Tech Stack
@@ -21,9 +21,10 @@ A multi-user blog built with Flask. Visitors can read posts, register and log in
 | Area | Library |
 |------|---------|
 | Framework | Flask 3.1 |
-| Database / ORM | Flask-SQLAlchemy, SQLAlchemy, SQLite |
+| Database / ORM | Flask-SQLAlchemy, SQLAlchemy, SQLite (local), PostgreSQL (production) |
+| Database driver | psycopg2-binary |
 | Authentication | Flask-Login, Werkzeug |
-| Forms | Flask-WTF, WTForms |
+| Forms | Flask-WTF, WTForms, email-validator |
 | Editor | Flask-CKEditor |
 | UI | Bootstrap-Flask (Bootstrap 5) |
 | Config | python-dotenv |
@@ -99,6 +100,8 @@ python main.py
 
 Open [http://127.0.0.1:5002](http://127.0.0.1:5002) in your browser. The database and tables are created automatically on first run.
 
+Locally the app uses SQLite (`instance/posts.db`). If you set a `DB_URI` environment variable, it uses that database instead.
+
 ## Usage
 
 1. **Register the first account.** The first user created gets ID 1 and becomes the **admin**. Do this yourself before sharing the app with anyone.
@@ -140,12 +143,19 @@ You can test Gunicorn locally with:
 gunicorn main:app
 ```
 
+Environment variables to set on your host:
+
+| Variable | Purpose |
+|----------|---------|
+| `SECRET_KEY` | Signs login sessions. Use a long random value. |
+| `DB_URI` | PostgreSQL connection string. The URL must start with `postgresql://` (not `postgres://`). |
+
 Before deploying:
 
-- Set `SECRET_KEY` as an environment variable on your host. Do not commit it.
-- Make sure `app.run(debug=True)` only runs locally. It is inside the `if __name__ == "__main__":` block, so Gunicorn ignores it, but never deploy with the debugger enabled.
+- Never commit `.env` or your secrets. Set them as environment variables on your host.
+- `app.run(debug=True)` is inside the `if __name__ == "__main__":` block, so Gunicorn ignores it. Never deploy with the debugger enabled.
 - Register your own account first on the fresh database so you become the admin.
-- SQLite stores data in a local file, and many hosts reset their filesystem on every deploy or restart. For a persistent production setup, use a hosted database such as PostgreSQL and provide its URL through an environment variable.
+- Use PostgreSQL in production. SQLite stores data in a local file, and many hosts reset their filesystem on every deploy or restart. On Render, create a PostgreSQL database and use its **Internal Database URL** as `DB_URI`.
 
 ## Security
 
