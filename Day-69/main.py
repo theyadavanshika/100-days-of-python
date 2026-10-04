@@ -7,6 +7,7 @@ import hashlib
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
 
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
@@ -39,7 +40,7 @@ class Base(DeclarativeBase):
     pass
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///posts.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI", "sqlite:///posts.db")
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
