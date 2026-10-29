@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cafe Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>My Cafe Website</h1>
+    <div class="add-cafe-link">
+    <a href="/add">+ Add a Cafe</a>
+</div>
+
+    <form method="GET" action="/">
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by cafe name or location..."
+            value="{{ search }}"
+        >
+        <button type="submit">Search</button>
+
+        <a href="/" class="reset-button">Show all cafes</a>
+
+    </form>
+
+
+<p class="cafe-count">{{ cafes|length }} cafes found</p>
+
+
+
+    <div class="cafe-grid">
+    {% for cafe in cafes %}
+        <div class="cafe-card">
+            <h2>
+                <a href="{{ cafe[2] }}" target="_blank">{{ cafe[1] }}</a>
+            </h2>
+            <img src="{{ cafe[3] }}" alt="{{ cafe[1] }}" class="cafe-image">
+            <p>Location: {{ cafe[4] }}</p>
+            <p>Wi-Fi: {{ "Available" if cafe[7] else "Not available" }}</p>
+            <p>Sockets: {{ "Available" if cafe[5] else "Not available" }}</p>
+            <p>Coffee Price: {{ cafe[10] }}</p>
+
+<a href="{{ cafe[2] }}" target="_blank" class="map-button">
+    View on Google Maps
+</a>
+
+        </div>
+        {% else %}
+        <p class="no-results">
+            No cafes found. Try another search!
+        </p>
+    {% endfor %}
+</div>
+
+
+<footer>
+    <p>☕ Made with love for coffee lovers.</p>
+</footer>
+
+</body>
+</html>
