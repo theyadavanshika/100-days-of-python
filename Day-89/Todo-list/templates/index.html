@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  
+
+<div class="todo-container">
+    <h1>My Todo List</h1>
+    <p class="subtitle">Plan your day, one task at a time.</p>
+
+
+<div class="task-stats">
+    <div class="stat">
+        <span class="stat-number">{{ total_tasks }}</span>
+        <span class="stat-label">Total</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-number">{{ pending_tasks }}</span>
+        <span class="stat-label">Remaining</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-number">{{ completed_tasks }}</span>
+        <span class="stat-label">Completed</span>
+    </div>
+</div>
+
+
+    <form class="task-form" action="/" method="POST">
+        <input
+            type="text"
+            name="task"
+            placeholder="What needs to get done?"
+            required
+        >
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul class="task-list">
+        {% if tasks %}
+            {% for task in tasks %}
+                <li class="task-item">
+                    <form action="{{ url_for('complete_task', task_id=task.id) }}"
+                          method="POST">
+                        <button type="submit" class="complete-button">
+                            {{ "✓" if task.completed else "○" }}
+                        </button>
+                    </form>
+
+                    <span class="{{ 'completed' if task.completed else '' }}">
+                        {{ task.title }}
+                    </span>
+
+                    <form action="{{ url_for('delete_task', task_id=task.id) }}"
+                          method="POST">
+                        <button type="submit" class="delete-button">
+                            Delete
+                        </button>
+                    </form>
+                </li>
+            {% endfor %}
+        
+{% else %}
+    <li class="empty-message">
+        <div class="empty-title">Nothing on your list yet</div>
+        <p>Add a task above to get started.</p>
+    </li>
+{% endif %}
+
+    </ul>
+
+    <p class="footer">Make today count.</p>
+</div>
+
+
+
+</body>
+</html>
