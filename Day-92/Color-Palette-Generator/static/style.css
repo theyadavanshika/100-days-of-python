@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f7;
+    text-align: center;
+    padding: 40px 20px;
+    margin: 0;
+    color: #333;
+}
+
+h1 {
+    color: #303030;
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+p {
+    color: #666;
+    font-size: 18px;
+}
+
+
+form {
+    margin: 35px auto;
+}
+
+input[type="file"] {
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+
+button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #5148d8;
+}
+
+
+h2 {
+    color: #333;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    font-size: 26px;
+}
+
+
+.color-container {
+    display: grid;
+    grid-template-columns: repeat(5, 150px);
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+
+.color-box {
+    height: 130px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s;
+}
+
+.color-box:hover {
+    transform: translateY(-5px);
+}
+
+
+.color-box span {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+
+@media (max-width: 900px) {
+    .color-container {
+        grid-template-columns: repeat(3, 150px);
+    }
+}
+
+
+@media (max-width: 550px) {
+    body {
+        padding: 25px 10px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .color-container {
+        grid-template-columns: repeat(2, 130px);
+        gap: 15px;
+    }
+
+    .color-box {
+        height: 110px;
+        cursor: pointer;
+    }
+
+    input[type="file"] {
+        margin-bottom: 15px;
+    }
+}
+
+.image-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 25px auto;
+}
+
+.image-preview img {
+    display: block;
+    max-width: 350px;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.error-message {
+    color: #d93025;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.success-message {
+    color: #218838;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 25px;
+}

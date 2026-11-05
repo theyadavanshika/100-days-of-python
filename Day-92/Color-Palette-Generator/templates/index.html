@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Palette Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Color Palette Generator</h1>
+
+    <p>Upload an image and discover its top 10 most common colours!</p>
+
+  <form action="/" method="POST" enctype="multipart/form-data">
+
+    <input
+        type="file"
+        id="image-upload"
+        name="image"
+        accept="image/*"
+        required
+        onchange="previewImage(event)"
+    >
+
+    <button type="submit">Extract Colors</button>
+
+</form>
+
+
+
+<div class="image-preview">
+    <img id="preview" src="" alt="Image Preview" style="display: none;">
+</div>
+{% if hex_colors %}
+
+    <p class="success-message">
+    10 colours successfully extracted!
+</p>
+
+    <h2>Your Color Palette</h2>
+
+    <div class="color-container">
+
+        {% for color in hex_colors %}
+
+            <div class="color-box" 
+     style="background-color: {{ color }};"
+     onclick="copyColor('{{ color }}', this)">
+                <span>{{ color }}</span>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
+
+
+<script>
+    function copyColor(color, element) {
+
+        navigator.clipboard.writeText(color);
+
+        element.querySelector("span").innerText = "Copied!";
+
+        setTimeout(function() {
+            element.querySelector("span").innerText = color;
+        }, 1000);
+
+    }
+
+function previewImage(event) {
+
+    const image = document.getElementById("preview");
+
+    image.src = URL.createObjectURL(event.target.files[0]);
+
+    image.style.display = "block";
+
+}
+</script>
+
+</body>
+</html>
